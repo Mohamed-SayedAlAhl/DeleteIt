@@ -18,7 +18,7 @@ namespace Delete_It // Your namespace
         
         private static string currentProcessId = "";
         private static string FolderToDeletePath = "";
-      
+        
 
         public static string FullMessage="";
 
@@ -271,7 +271,20 @@ namespace Delete_It // Your namespace
             return false; // EULA has not been accepted
         }
 
+        public static int CheckIfTxtFileIsOpen()
+        {
 
+
+            Process[] processes = Process.GetProcessesByName("notepad");
+            return processes.Count();
+
+        }
+
+      
+
+
+
+        
         public static condition checkCurrentProcess(string filePath)
         {
             try
@@ -281,11 +294,7 @@ namespace Delete_It // Your namespace
                 // Path to handle.exe (adjust if necessary)
                 string handleExePath = ExtractHandleExe(); 
 
-                if(!IsEulaAccepted())
-                {
-                    AcceptingHandleEula(handleExePath);
-                }
-
+                
                 if (!File.Exists(handleExePath))
                 {
                     CustomMessageBox.Show("Handle.exe not found!", "Error", MessageBoxIcon.Error, true, "OK");
@@ -410,6 +419,7 @@ namespace Delete_It // Your namespace
 
             foreach (var filePath in Directory.GetFiles(FolderPath))
             {
+                
                 GetProcessesDataForFolders(filePath);
                
                 
@@ -428,7 +438,10 @@ namespace Delete_It // Your namespace
 
         }
 
+        
 
+
+        
         // Extracts the process ID from the handle.exe output
         private static string ExtractProcessId(string handleOutput, string filePath)
         {

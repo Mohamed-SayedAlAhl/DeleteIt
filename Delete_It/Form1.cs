@@ -428,6 +428,7 @@ namespace Delete_It
         {
 
 			string folderName = Path.GetFileName(directoryPath);
+			short counter = 0;
 
 		aa:
             try
@@ -437,6 +438,7 @@ namespace Delete_It
 
 				try
 				{
+					
 					Directory.Delete(directoryPath, true);
 
 					
@@ -501,8 +503,31 @@ namespace Delete_It
 
                     else
                     {
-						//No Active Apps
-						if (ProcessKiller.ActiveApps.Count == 0)
+						counter++;
+
+
+						if (ProcessKiller.CheckIfTxtFileIsOpen()>0)
+                        {
+							result = CustomMessageBox.Show($"Please close notepad so we can proceed with deletion.\nOnce closed, click 'Done' to continue.\nIf you're unable to close them, a reboot will be required.",
+												"Folder is In Use",
+												MessageBoxIcon.Warning, false, "Done", "Couldn't");
+
+
+
+
+							if (result == DialogResult.Yes)
+							{
+								goto aa;
+							}
+							else
+							{
+								HandleAccessDeniedErrorForFolders(directoryPath);
+							}
+						}
+
+
+
+						if (ProcessKiller.ActiveApps.Count == 0&&counter==1)
 							goto aa;
 
 						result = CustomMessageBox.Show($"Please close the folder or any files/subfolders inside it that are currently in use so we can proceed with deletion.\nOnce closed, click 'Done' to continue.\nIf you're unable to close them, a reboot will be required.",
